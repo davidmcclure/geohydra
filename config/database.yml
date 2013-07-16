@@ -1,0 +1,23 @@
+development:
+  adapter: postgresql
+  host: 127.0.0.1
+  port: 5432
+  user: geostaff
+  database: geoserver
+  schema: druid
+
+testing:
+  adapter: postgresql
+  host: 127.0.0.1
+  port: 5432
+  user: geostaff
+  database: geoserver
+  schema: druid
+
+production:
+  adapter: postgresql
+  host: 127.0.0.1
+  port: 5432
+  user: geostaff
+  database: geoserver
+  schema: druid

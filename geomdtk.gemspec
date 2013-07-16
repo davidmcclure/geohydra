@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.licenses = ['ALv2', 'Stanford University Libraries']
   
   s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- spec/*`.split("\n")
+  s.test_files    = `git ls-files -- test/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ['lib']
 
@@ -22,6 +22,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'nokogiri', '~> 1.6' # need libxml2 >= 2.7.8 and 1.6 bundles latest libxml2, BUT conflicts with dor-services
   s.add_dependency 'rest-client'
   s.add_dependency 'rsolr'
+  s.add_dependency 'rails', '~> 3.2.0'
+  s.add_dependency 'activerecord-postgresql-adapter'
+  s.add_dependency 'pg'
   
   # SUL-DLSS gems
   s.add_dependency 'assembly-objectfile'
@@ -37,6 +40,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rdoc'
   s.add_development_dependency 'redcarpet' # provides Markdown
   s.add_development_dependency 'rspec'
-  s.add_development_dependency 'version_bumper', '~> 0.4.0'
+  s.add_development_dependency 'version_bumper', '~> 0.4.0' # manages VERSION
   s.add_development_dependency 'yard'
 end

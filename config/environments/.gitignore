@@ -4,5 +4,5 @@ local.rb
 local_rgeoserver.yml
 production.rb
 production_rgeoserver.yml
-testing.rb
-testing_rgeoserver.yml
+test.rb
+test_rgeoserver.yml
