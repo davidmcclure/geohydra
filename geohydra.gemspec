@@ -28,11 +28,15 @@ Gem::Specification.new do |s|
   s.add_dependency 'activerecord', '~> 3.2.0'
   s.add_dependency 'activesupport', '~> 3.2.0'
   s.add_dependency 'activerecord-postgresql-adapter'
-  
+  # TODO|dev
+  s.add_dependency 'docopt'
+  s.add_dependency 'bagit'
+
   # SUL-DLSS gems
-  s.add_dependency 'assembly-objectfile'
-  s.add_dependency 'dor-services', '~> 4.2'
-  s.add_dependency 'druid-tools', '~> 0.2'
+  # TODO|dev
+  #s.add_dependency 'assembly-objectfile'
+  #s.add_dependency 'dor-services', '~> 4.2'
+  #s.add_dependency 'druid-tools', '~> 0.2'
   s.add_dependency 'mods'
   s.add_dependency 'rgeoserver', '~> 0.6.0'
 
