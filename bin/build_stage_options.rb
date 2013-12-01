@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require File.expand_path(File.dirname(__FILE__) + '/../config/boot')
 require 'geohydra'
 require 'json'
 
@@ -16,7 +17,7 @@ def doit(shp)
 end
 
 if ARGV.empty?
-  Dir.glob('/var/geomdtk/current/stage/**/temp/*.shp') do |shp|
+  Dir.glob("#{GeoHydra::Config.geohydra.stage}/**/temp/*.shp") do |shp|
     doit(shp)
   end
 else

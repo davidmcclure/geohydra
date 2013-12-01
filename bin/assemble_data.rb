@@ -36,7 +36,7 @@ begin
   flags = {
     :debug => false,
     :verbose => false,
-    :srcdir => '/var/geomdtk/current/stage'
+    :srcdir => GeoHydra::Config.geohydra.stage
   }
 
   OptionParser.new do |opts|
