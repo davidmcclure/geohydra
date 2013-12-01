@@ -16,7 +16,7 @@ require 'tmpdir'
 class RegisteredLayer < ActiveRecord::Base
   attr_accessible :druid, :layername, :title
   # self.primary_key = 'druid'
-  
+
   def find_by_druid(druid)
     RegisteredLayer.find(:first, :conditions => [ "druid = ?", druid.to_s])
   end
@@ -81,14 +81,14 @@ def main conn, layers, flags = {}
       raise ArgumentError, "Layer is missing required '#{i}'" if v[i.to_sym].nil? or not v.include?(i.to_sym)
     end
     puts "Processing layer #{k}" if flags[:verbose]
-  
+
     layername = v[:layername].strip
     format = v[:format].downcase.strip.to_sym
     druid = v[:druid]
     title = v[:title].strip
-      
+
     case format
-    when :shapefile      
+    when :shapefile
       ap({:v => v}) if flags[:debug]
       Dir.mktmpdir('shp', druid.temp_dir) do |d|
         begin
@@ -102,7 +102,7 @@ def main conn, layers, flags = {}
             system('psql --no-psqlrc --no-password --quiet ' +
                    "--host='#{flags[:host.to_s]}' " +
                    "--port='#{flags[:port.to_s]}' " +
-                   "--username='#{flags[:username.to_s]}' " + 
+                   "--username='#{flags[:username.to_s]}' " +
                    "--dbname='#{flags[:database.to_s]}' " +
                    "--file='#{druid.temp_dir}/#{druid.id}.sql' ")
           end
@@ -110,13 +110,13 @@ def main conn, layers, flags = {}
           FileUtils.rm_rf(d) if File.exist?(d)
         end
       end
-      
+
       if flags[:register]
         puts "Registering layer #{druid.id}, #{layername}, #{title}" if flags[:verbose]
         layer = RegisteredLayer.find_by_druid druid.id
         ap({:found_layer => layer}) if flags[:debug]
         if layer.nil?
-          layer = RegisteredLayer.new( 
+          layer = RegisteredLayer.new(
             :druid => druid.id,
             :layername => layername,
             :title => title
@@ -128,7 +128,7 @@ def main conn, layers, flags = {}
         layer.save
       end
     else
-      raise NotImplementedError, "Unsupported format #{format}"    
+      raise NotImplementedError, "Unsupported format #{format}"
     end
   end
 end
@@ -167,7 +167,7 @@ def from_druid druid, flags
   end
   raise ArgumentError, zipfn unless File.exist?(zipfn) and layername
   ap({:zipfn => zipfn, :layername => layername}) if flags[:debug]
-  r = { 
+  r = {
     :vector => {
       :druid => druid,
       :format => 'Shapefile',
@@ -192,7 +192,7 @@ begin
     :datadir => '/var/geomdtk/current/workspace',
     :schema => GeoHydra::Config.postgis.schema || 'public'
   }
-  
+
   OptionParser.new do |opts|
     opts.banner = "
 Usage: #{File.basename(__FILE__)} [-v] [druid ... | < druids]
@@ -204,7 +204,7 @@ Usage: #{File.basename(__FILE__)} [-v] [druid ... | < druids]
     opts.on("-d DIR", "--datadir DIR", "Data directory on GeoServer (default: #{flags[:datadir]})") do |v|
       raise ArgumentError, "Invalid directory #{v}" unless File.directory?(v)
       flags[:datadir] = v
-    end    
+    end
     opts.on("-R", "--register", "Register shapefile") do |v|
       flags[:register] = true
     end
@@ -223,9 +223,9 @@ Usage: #{File.basename(__FILE__)} [-v] [druid ... | < druids]
   raise ArgumentError, "Missing configuration for environment" unless dbconfig.include?(ENV['GEOHYDRA_ENVIRONMENT'])
   flags.merge! dbconfig[ENV['GEOHYDRA_ENVIRONMENT']]
   ap({:flags => flags}) if flags[:debug]
-  
+
   ActiveRecord::Base.logger = ActiveSupport::BufferedLogger.new($stderr) if flags[:debug]
-  
+
   conn = ActiveRecord::Base.establish_connection flags
   conn.with_connection do |db|
     # ap({:obj => db, :klass => db.class, :methods => db.public_methods, :schema_search_path => db.schema_search_path})
@@ -247,12 +247,12 @@ Usage: #{File.basename(__FILE__)} [-v] [druid ... | < druids]
             druid character varying NOT NULL PRIMARY KEY,
             layername character varying NOT NULL,
             title character varying NOT NULL
-          );      
+          );
           ")
       end
     end
   end
-    
+
   (ARGV.size > 0 ? ARGV : $stdin).each do |s|
       main(conn, from_druid(s.strip, flags), flags)
   end

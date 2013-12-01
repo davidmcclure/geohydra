@@ -33,9 +33,9 @@ begin
           AUTHORITY["EPSG","4326"]]
       }.split.join.freeze
     }
-    
-  }  
-  
+
+  }
+
   OptionParser.new do |opts|
     opts.banner = <<EOM
 Usage: #{File.basename(__FILE__)} [options] [druid...]
@@ -53,19 +53,19 @@ EOM
       flags[:wkt][srid.to_s] = File.read(f).split.join.freeze
     end
   end.parse!
-  
+
   [flags[:tmpdir], flags[:workspacedir]].each do |d|
     raise ArgumentError, "Missing directory #{d}" unless File.directory? d
   end
 
   if ARGV.empty?
     # matches druid workspace structure
-    Dir.glob(flags[:workspacedir] + '/??/???/??/????/???????????/content/*.zip').each do |fn| 
+    Dir.glob(flags[:workspacedir] + '/??/???/??/????/???????????/content/*.zip').each do |fn|
       id = File.basename(File.dirname(File.dirname(fn)))
       druid = DruidTools::Druid.new(id, flags[:workspacedir])
       unless fn =~ %r{_EPSG_}i
         puts "Processing #{druid.id} #{fn}"
-        GeoHydra::Transform.reproject druid, fn, flags 
+        GeoHydra::Transform.reproject druid, fn, flags
       end
     end
   else
@@ -74,7 +74,7 @@ EOM
       Dir.glob(druid.content_dir + '/*.zip').each do |fn|
         unless fn =~ %r{_EPSG_}i
           puts "Processing #{druid.id} #{fn}"
-          GeoHydra::Transform.reproject druid, fn, flags 
+          GeoHydra::Transform.reproject druid, fn, flags
         end
       end
     end

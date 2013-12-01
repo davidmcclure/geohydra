@@ -53,7 +53,7 @@ def do_vector(catalog, layername, format, ws, ds, v, flags)
   else
     raise NotImplemented, "Unknown remote type: #{v['remote']}"
   end
-  
+
   if v['remote'] =~ /file$/
     ds.connection_parameters = ds.connection_parameters.merge({
       "namespace" => flags[:namespace],
@@ -71,15 +71,15 @@ def do_vector(catalog, layername, format, ws, ds, v, flags)
   ds.enabled = 'true'
   ds.description = v['description']
   ds.save# unless v['remote'] =~ /-db$/
-  
-  ft = RGeoServer::FeatureType.new catalog, 
-    :workspace => ws, 
-    :data_store => ds, 
-    :name => layername 
+
+  ft = RGeoServer::FeatureType.new catalog,
+    :workspace => ws,
+    :data_store => ds,
+    :name => layername
   puts "WARNING: FeatureType doesn't already exists #{ft}" if ft.new?
   puts "FeatureType: #{ws.name}/#{ds.name}/#{ft.name}" if flags[:verbose]
   ft.enabled = 'true'
-  ft.title = v['title'] 
+  ft.title = v['title']
   ft.description = v['description']
   ft.keywords = v['keywords']
   ft.metadata_links = v['metadata_links']
@@ -96,16 +96,16 @@ def do_raster(catalog, layername, format, ws, v, flags)
   else
     cs.url = "file://" + File.join(flags[:datadir], v['filename'])
   end
-  cs.description = v['description'] 
+  cs.description = v['description']
   cs.enabled = 'true'
   cs.data_type = format
   cs.save
 
   # Now create the actual coverage
   puts "Coverage: #{ws.name}/#{cs.name}/#{layername}" if flags[:verbose]
-  cv = RGeoServer::Coverage.new catalog, :workspace => ws, :coverage_store => cs, :name => layername 
+  cv = RGeoServer::Coverage.new catalog, :workspace => ws, :coverage_store => cs, :name => layername
   cv.enabled = 'true'
-  cv.title = v['title'] 
+  cv.title = v['title']
   cv.keywords = v['keywords']
   cv.metadata_links = v['metadata_links']
   cv.save
@@ -134,14 +134,14 @@ def main catalog, ws, layers, flags = {}
 
     layername = v['layername'].strip
     format = v['format'].strip
-    
+
     case format
     when 'GeoTIFF'
       do_raster catalog, layername, format, ws, v, flags
     when 'Shapefile'
       do_vector catalog, layername, format, ws, flags[:datastore], v, flags
     else
-      raise NotImplementedError, "Unsupported format #{format}"    
+      raise NotImplementedError, "Unsupported format #{format}"
     end
   end
 end
@@ -170,7 +170,7 @@ def from_druid druid, flags
   end
   raise ArgumentError, zipfn unless File.exist?(zipfn) and layername
   ap({:zipfn => zipfn, :layername => layername}) if flags[:verbose]
-  r = { 
+  r = {
     'vector' => {
       'druid' => druid,
       'remote' => flags[:remote],
@@ -208,12 +208,12 @@ begin
     # :database => 'geoserver',
     # :schema => 'druid'
   }
-  
+
   OptionParser.new do |opts|
     opts.banner = "
 Usage: #{File.basename(__FILE__)} [-v] [--delete] [-f MODS] [druid ... | < druids]
        #{File.basename(__FILE__)} [-v] [--delete] -f YAML [input.yaml ... | <input.yml]
-           
+
     "
     opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
       flags[:debug] = true if flags[:verbose]
@@ -254,15 +254,15 @@ Usage: #{File.basename(__FILE__)} [-v] [--delete] [-f MODS] [druid ... | < druid
       flags[:datastore] = 'postgis'
     end
   end.parse!
-  
+
   ap({:flags => flags}) if flags[:debug]
-  
+
   # init
   # Connect to the GeoServer catalog
   puts "Connecting to catalog..." if flags[:verbose]
   catalog = RGeoServer::catalog
 
-  # Obtain a handle to the workspace and clean it up. 
+  # Obtain a handle to the workspace and clean it up.
   ws = RGeoServer::Workspace.new catalog, :name => flags[:workspace]
   puts "Workspace: #{ws.name} new?=#{ws.new?}" if flags[:verbose]
   ws.delete :recurse => true if flags[:delete] and not ws.new?
