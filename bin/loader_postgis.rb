@@ -189,7 +189,7 @@ begin
     :register_drop => false,
     :register_table => 'registered_layers',
     :encoding => 'UTF-8',
-    :datadir => '/var/geomdtk/current/workspace',
+    :datadir => GeoHydra::Config.geohydra.workspace,
     :schema => GeoHydra::Config.postgis.schema || 'public'
   }
 
