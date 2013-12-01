@@ -29,11 +29,11 @@ K2LCURI = {
 }
 
 describe GeoHydra::Gazetteer do
-  
+
   describe '#find_id_by_keyword' do
     it "nil case" do
-      g.find_id_by_keyword(nil).should == nil      
-      g.find_id_by_keyword('adsfadsfasdf').should == nil      
+      g.find_id_by_keyword(nil).should == nil
+      g.find_id_by_keyword('adsfadsfasdf').should == nil
     end
     K2ID.each do |k,id|
       it k do
@@ -42,11 +42,11 @@ describe GeoHydra::Gazetteer do
       end
     end
   end
-  
+
   describe '#find_lc_by_keyword' do
     it "nil case" do
-      g.find_lc_by_keyword(nil).should == nil      
-      g.find_lc_by_keyword('asdfasdfasdf').should == nil      
+      g.find_lc_by_keyword(nil).should == nil
+      g.find_lc_by_keyword('asdfasdfasdf').should == nil
     end
     K2LC.each do |k,lcsh|
       it k do
@@ -58,8 +58,8 @@ describe GeoHydra::Gazetteer do
 
   describe '#find_lcuri_by_keyword' do
     it "nil case" do
-      g.find_lcuri_by_keyword(nil).should == nil      
-      g.find_lcuri_by_keyword('asdfasdfasdf').should == nil      
+      g.find_lcuri_by_keyword(nil).should == nil
+      g.find_lcuri_by_keyword('asdfasdfasdf').should == nil
     end
     K2LCURI.each do |k,lcuri|
       it k do
@@ -68,12 +68,12 @@ describe GeoHydra::Gazetteer do
       end
     end
   end
-  
+
 
   describe '#find_uri_by_keyword' do
     it "nil case" do
-      g.find_uri_by_keyword(nil).should == nil      
-      g.find_uri_by_keyword('asdfasdfasdf').should == nil      
+      g.find_uri_by_keyword(nil).should == nil
+      g.find_uri_by_keyword('asdfasdfasdf').should == nil
     end
     K2ID.each do |k,id|
       it k do
@@ -82,11 +82,11 @@ describe GeoHydra::Gazetteer do
       end
     end
   end
-  
+
   describe '#find_keyword_by_id' do
     it "nil case" do
-      g.find_keyword_by_id(nil).should == nil      
-      g.find_keyword_by_id(-1).should == nil      
+      g.find_keyword_by_id(nil).should == nil
+      g.find_keyword_by_id(-1).should == nil
     end
     K2ID.each do |k,id|
       it id do
@@ -95,6 +95,6 @@ describe GeoHydra::Gazetteer do
       end
     end
   end
-  
-  
+
+
 end
