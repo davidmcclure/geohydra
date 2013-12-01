@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.description = %q{Geospatial MetaData ToolKit for use in a GeoHydra head}
   s.has_rdoc = true
   s.licenses = ['ALv2', 'Stanford University Libraries']
-  
+
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- spec/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
@@ -29,14 +29,19 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport', '~> 3.2.0'
   s.add_dependency 'activerecord-postgresql-adapter'
   # TODO|dev
+  # ---
   s.add_dependency 'docopt'
   s.add_dependency 'bagit'
+  # ---
+
 
   # SUL-DLSS gems
   # TODO|dev
+  # ---
   #s.add_dependency 'assembly-objectfile'
   #s.add_dependency 'dor-services', '~> 4.2'
   #s.add_dependency 'druid-tools', '~> 0.2'
+  # ---
   s.add_dependency 'mods'
   s.add_dependency 'rgeoserver', '~> 0.6.0'
 
