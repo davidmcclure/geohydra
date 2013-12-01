@@ -6,7 +6,7 @@ ARGV.each do |druid|
   x = '20037508'
   url = URI("http://#{h}/geoserver/gwc/service/wms")
   url.query = URI.encode_www_form(
-    'LAYERS' => "druid:#{druid}", 
+    'LAYERS' => "druid:#{druid}",
     'FORMAT' => 'image/jpeg',
     'SERVICE' => 'WMS',
     'VERSION' => '1.1.1',
@@ -17,6 +17,6 @@ ARGV.each do |druid|
     'WIDTH' => '256',
     'HEIGHT' => '256'
   )
-  
+
   puts "curl -o '/tmp/#{druid}.jpg' '#{url}'"
 end

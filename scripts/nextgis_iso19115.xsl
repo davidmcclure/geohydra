@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- 
+<!--
 ISO 19139 default stylesheet
 Based on metadata-iso19139.xsl from exCat
 http://gdsc.nlr.nl/gdsc/en/tools/excat
 
 /***************************************************************************
  Metadata browser/editor
-                             
+
         begin                : 2011-02-21
         copyright            : (C) 2011 by NextGIS
         email                : info@nextgis.ru
@@ -21,7 +21,7 @@ http://gdsc.nlr.nl/gdsc/en/tools/excat
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
- <xsl:output method="html" encoding="ISO-8859-1"/>	 
+ <xsl:output method="html" encoding="ISO-8859-1"/>
 -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
@@ -49,11 +49,11 @@ http://gdsc.nlr.nl/gdsc/en/tools/excat
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
+
 <xsl:template match="gmd:MD_Metadata">
-   
+
 <!-- Metadata block -->
- 
+
  <html>
    <head>
    	 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -71,7 +71,7 @@ http://gdsc.nlr.nl/gdsc/en/tools/excat
 					   display: inline;
 					   font-size: 0.9em;
 					   /*background: #cae1ff;*/
-					   background: #ffffff; }					
+					   background: #ffffff; }
 	.meta { vertical-align: top; }
 	.meta-param { vertical-align: top; color: #004393 }
 	.meta-value { vertical-align: top;}
@@ -106,9 +106,9 @@ http://gdsc.nlr.nl/gdsc/en/tools/excat
       <xsl:with-param name="cvalue" select="./gmd:metadataStandardVersion/gco:CharacterString"/>
       </xsl:call-template>
 </table>
- 
+
 <xsl:apply-templates select="./gmd:contact"/>
-</div> 
+</div>
 
 <!-- Identification block -->
 <xsl:apply-templates select="./gmd:identificationInfo/gmd:MD_DataIdentification"/>
@@ -121,7 +121,7 @@ http://gdsc.nlr.nl/gdsc/en/tools/excat
 
 <!--  DataQuality -->
 <xsl:apply-templates select="./gmd:dataQualityInfo/gmd:DQ_DataQuality"/>
-  		
+
    </body>
  </html>
 </xsl:template>
@@ -222,7 +222,7 @@ http://gdsc.nlr.nl/gdsc/en/tools/excat
       <xsl:apply-templates select="./gmd:abstract"/>
       </td>
       </tr>
-      
+
       <!-- Keywords  -->
       <xsl:choose>
       <xsl:when test="./gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword">
@@ -231,18 +231,18 @@ http://gdsc.nlr.nl/gdsc/en/tools/excat
         <td class="meta-value">
             <xsl:apply-templates select="./gmd:descriptiveKeywords/gmd:MD_Keywords/gmd:keyword"/>
         </td>
-      </tr>  
+      </tr>
       </xsl:when>
       <xsl:otherwise>
       </xsl:otherwise>
     </xsl:choose>
-      
-     <!--  Spatial repres --> 
+
+     <!--  Spatial repres -->
       <xsl:call-template name="tablerow">
       <xsl:with-param name="cname" select="'Spatial representation type'"/>
       <xsl:with-param name="cvalue" select="./gmd:spatialRepresentationType/gmd:MD_SpatialRepresentationTypeCode"/>
       </xsl:call-template>
-      
+
       <!-- Spatial scale -->
       <xsl:choose>
       <xsl:when test="./gmd:spatialResolution/gmd:MD_Resolution/gmd:equivalentScale/gmd:MD_RepresentativeFraction/gmd:denominator/gco:Integer">
@@ -251,12 +251,12 @@ http://gdsc.nlr.nl/gdsc/en/tools/excat
         <td class="meta-value">
             1:<xsl:apply-templates select="./gmd:spatialResolution/gmd:MD_Resolution/gmd:equivalentScale/gmd:MD_RepresentativeFraction/gmd:denominator/gco:Integer"/>
         </td>
-      </tr>  
+      </tr>
       </xsl:when>
           <xsl:otherwise>
         </xsl:otherwise>
       </xsl:choose>
-      
+
       <!-- Spatial accuracy -->
       <xsl:choose>
       <xsl:when test="./gmd:spatialResolution/gmd:MD_Resolution/gmd:distance/gco:Distance">
@@ -266,14 +266,14 @@ http://gdsc.nlr.nl/gdsc/en/tools/excat
             <xsl:apply-templates select="./gmd:spatialResolution/gmd:MD_Resolution/gmd:distance/gco:Distance"/>
             <xsl:apply-templates select="./gmd:spatialResolution/gmd:MD_Resolution/gmd:distance/gco:Distance/@uom"/>
         </td>
-      </tr>  
+      </tr>
       </xsl:when>
           <xsl:otherwise>
         </xsl:otherwise>
       </xsl:choose>
-      
-     
-      
+
+
+
 </table>
             <!-- License info block -->
             <xsl:apply-templates select="./gmd:resourceConstraints/gmd:MD_LegalConstraints"/>
@@ -305,7 +305,7 @@ http://gdsc.nlr.nl/gdsc/en/tools/excat
 </div>
 
 </xsl:template>
- 
+
 
 <!-- 'dataQualityInfo block -->
 <xsl:template match="gmd:contentInfo">
@@ -323,15 +323,15 @@ http://gdsc.nlr.nl/gdsc/en/tools/excat
       <xsl:with-param name="cname" select="'Content type'"/>
       <xsl:with-param name="cvalue" select="./gmd:contentType/gmd:MD_CoverageContentTypeCode"/>
     </xsl:call-template>
-    
+
     <xsl:choose>
       <xsl:when test="./gmd:dimension/gmd:MD_Band">
       <tr>
       <td class="meta-param">Bands:</td>
-        <td class="meta-value">    
+        <td class="meta-value">
             <xsl:apply-templates select="./gmd:dimension/gmd:MD_Band"/>
-        </td>   
-      </tr>  
+        </td>
+      </tr>
       </xsl:when>
           <xsl:otherwise>
         </xsl:otherwise>
@@ -354,15 +354,15 @@ http://gdsc.nlr.nl/gdsc/en/tools/excat
           <xsl:with-param name="cname" select="'Max value'"/>
           <xsl:with-param name="cvalue" select="./gmd:maxValue/gco:Real"/>
           </xsl:call-template>
-          
+
           <xsl:call-template name="tablerow">
           <xsl:with-param name="cname" select="'Bits per value'"/>
           <xsl:with-param name="cvalue" select="./gmd:bitsPerValue/gco:Integer"/>
-          </xsl:call-template>              
-</table> 
+          </xsl:call-template>
+</table>
 </div>
 </xsl:template>
- 
+
 
  <!-- 'License info' block -->
   <xsl:template match="gmd:MD_LegalConstraints">
@@ -496,7 +496,7 @@ http://gdsc.nlr.nl/gdsc/en/tools/excat
       </div>
     </xsl:if>
   </xsl:template>
-  
+
   <!-- 'Distribution Info' block -->
   <xsl:template match="gmd:MD_Distribution">
     <div class="captioneddiv">

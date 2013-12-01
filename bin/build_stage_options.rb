@@ -12,7 +12,7 @@ def doit(shp)
   File.open(File.join(File.dirname(shp), 'geoOptions.json'), 'w') do |f|
     f.puts r.to_json.to_s
   end
-  
+
 end
 
 if ARGV.empty?
@@ -23,5 +23,5 @@ else
   ARGV.each do |shp|
     doit(shp)
   end
-  
+
 end

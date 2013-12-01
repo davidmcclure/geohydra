@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
      ogpcleanup.xsl - Fix FgdcText so that XML is properly escaped
-     
+
      Copyright 2013, Stanford University Libraries.
-     
+
      Created by Darren Hardy.
      -->
 <xsl:stylesheet xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://lucene.apache.org/solr/4/document" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:solr="http://lucene.apache.org/solr/4/document" version="1.0" exclude-result-prefixes="xi xsl rdf solr">

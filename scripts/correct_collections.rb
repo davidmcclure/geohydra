@@ -6,22 +6,22 @@ require 'druid-tools'
 
 def doit(druid, flags)
   puts "Processing #{druid.id}"
-  
+
   begin
     item = Dor::Item.find(druid.druid)
     ap({:item => item, :collections => item.collections}) if flags[:debug]
-    
+
     # remove all collections
     item.collections.dup.each {|c| item.remove_collection(c)}
-    
+
     # add the new ones
     flags[:collections].each do |k, collection|
       item.add_collection(collection)
     end
-    
+
     ap({:item => item, :collections => item.collections}) if flags[:debug]
     unless item.allows_modification?
-      puts "WARNING: Item not editable: #{druid.id}" 
+      puts "WARNING: Item not editable: #{druid.id}"
       item.open_new_version
     end
     item.save
@@ -66,7 +66,7 @@ EOM
   end
 
   ap({:flags => flags}) if flags[:debug]
-  
+
   # Validate collection druids
   flags[:collections].each do |druid,v|
     begin

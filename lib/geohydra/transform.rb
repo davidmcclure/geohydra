@@ -23,18 +23,18 @@ module GeoHydra
       end
       nil
     end
-    
+
     # XSLT file locations
     XSLT = {
       :arcgis     => self.search_for_xsl('ArcGIS2ISO19139.xsl'),
       :arcgis_fc  => self.search_for_xsl('arcgis_to_iso19139_fc.xsl')
     }
-    
+
     # XSLT processor
     XSLTPROC = 'xsltproc --novalid --xinclude'
     # XML cleaner
     XMLLINT = 'xmllint --format --xinclude --nsclean'
-    
+
     # Converts a ISO 19139 into MODS v3
     # @param [String] fn with data as ISO 19139 XML.
     # @return [Nokogiri::XML::Document] the MODS v3 metadata
@@ -43,7 +43,7 @@ module GeoHydra
       doc = Dor::GeoMetadataDS.from_xml File.open(fn)
       doc.to_mods
     end
-    
+
     # Converts an ESRI ArcCatalog metadata.xml into ISO 19139
     # @param [String] fn Input file
     # @param [String] ofn Output file
@@ -54,14 +54,14 @@ module GeoHydra
         system("#{XSLTPROC} #{XSLT[:arcgis_fc]} '#{fn}' | #{XMLLINT} -o '#{ofn_fc}' -")
       end
     end
-    
+
     # @return [Hash]
     # @deprecated
     def self.to_solr fn
       doc = Dor::GeoMetadataDS.from_xml File.read(fn)
       doc.to_solr
     end
-    
+
     # Extracts an inline thumbnail from the ESRI ArcCatalog metadata format
     # @param [String] fn the metadata
     # @param [String] thumbnail_fn the file into which to write JPEG image
@@ -78,7 +78,7 @@ module GeoHydra
       end
       raise ArgumentError, "No thumbnail embedded within #{fn}"
     end
-    
+
     # Converts a ISO 19139 into RDF-bundled document geoMetadataDS
     # @param [Nokogiri::XML::Document] isoXml ISO 19193 MD_Metadata node
     # @param [Nokogiri::XML::Document] fcXml ISO 19193 feature catalog
@@ -106,23 +106,23 @@ module GeoHydra
       FileUtils.rm_rf tmp if File.directory? tmp
       FileUtils.mkdir_p tmp
       system("unzip -q -j '#{zipfn}' -d '#{tmp}'")
-      
+
       shpfn = nil
       Dir.glob("#{tmp}/**/*.shp") do |fn|
         shpfn = File.basename(fn)
       end
-      
+
       [4326].each do |srid|
         ifn = File.join(tmp, shpfn)
         raise ArgumentError, "#{ifn} is missing" unless File.exist? ifn
-        
+
         odr = File.join(flags[:tmpdir], 'EPSG_' + srid.to_s)
         ofn = File.join(odr, shpfn)
         puts "Projecting #{ifn} -> #{odr}/#{ofn}" if flags[:verbose]
 
         # reproject
         FileUtils.mkdir_p odr unless File.directory? odr
-        system("ogr2ogr -progress -t_srs '#{flags[:wkt][srid.to_s]}' '#{ofn}' '#{ifn}'") 
+        system("ogr2ogr -progress -t_srs '#{flags[:wkt][srid.to_s]}' '#{ofn}' '#{ifn}'")
 
         # normalize prj file
         if flags[:overwrite_prj] and not flags[:wkt][srid.to_s].nil?
@@ -143,7 +143,7 @@ module GeoHydra
       # cleanup
       FileUtils.rm_rf tmp
     end
-    
+
     # Reads the shapefile to determine geometry type
     #
     # @return [String] Point, Polygon, LineString as appropriate
@@ -156,10 +156,10 @@ module GeoHydra
         end
       rescue RGeo::Error::RGeoError => e
         puts e.message
-      end 
-      nil     
+      end
+      nil
     end
-    
+
     private
     def self.do_xslt xslt, fn, params = {}
       cmd = XSLTPROC
@@ -169,7 +169,7 @@ module GeoHydra
       # ap({:cmd => cmd, :xslt => xslt})
       IO::popen("#{cmd} #{xslt} #{fn} | #{XMLLINT} -", 'r') do |f|
         return Nokogiri::XML(f.read)
-      end      
+      end
     end
   end
 end

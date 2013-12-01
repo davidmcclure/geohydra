@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.name = 'geohydra'
   s.version = GeoHydra::VERSION
   s.platform = Gem::Platform::RUBY
-  s.required_ruby_version = '~> 1.9.3'
+  s.required_ruby_version = '>= 1.9.3'
   s.authors = ['Darren Hardy']
   s.email = ['drh@stanford.edu']
   s.summary = %q{GeoHydra}
@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'confstruct'
   s.add_dependency 'json'
-  s.add_dependency 'fastimage'  
+  s.add_dependency 'fastimage'
   s.add_dependency 'nokogiri', '~> 1.5.10'
   s.add_dependency 'rest-client'
   s.add_dependency 'rsolr'
@@ -43,7 +43,7 @@ Gem::Specification.new do |s|
   #s.add_dependency 'druid-tools', '~> 0.2'
   # ---
   s.add_dependency 'mods'
-  s.add_dependency 'rgeoserver', '~> 0.6.0'
+  #s.add_dependency 'rgeoserver', '~> 0.6.0'
 
   s.add_development_dependency 'awesome_print'
   s.add_development_dependency 'equivalent-xml'

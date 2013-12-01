@@ -8,7 +8,7 @@ Dir.glob('/Volumes/Geo3TB/document_cache/??/???/??/????/mods') do |fn|
   # puts fn
   if fn =~ %r{(../\d\d\d/../\d\d\d\d)/mods$}
     druid = $1.gsub(/\//, '')
-  else 
+  else
     raise ArgumentError, fn
   end
   s = File.read(fn)

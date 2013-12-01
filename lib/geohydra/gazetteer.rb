@@ -5,9 +5,9 @@ require 'awesome_print'
 
 module GeoHydra
   class Gazetteer
-    
+
     CSV_FN = File.join(File.dirname(__FILE__), 'gazetteer.csv')
-    
+
     def initialize
       @registry = {}
       CSV.foreach(CSV_FN, :encoding => 'UTF-8') do |v|
@@ -18,12 +18,12 @@ module GeoHydra
         }
       end
     end
-    
+
     def _get(k, i)
       return nil unless @registry.include?(k)
       @registry[k][i]
     end
-    
+
     # @return [Integer] geonames id
     def find_id_by_keyword(k)
       _get(k, :id)
@@ -33,7 +33,7 @@ module GeoHydra
     def find_lc_by_keyword(k)
       _get(k, :lc)
     end
-    
+
     # @return [String] library of congress valueURI
     def find_lcuri_by_keyword(k)
       lcid = _get(k, :lcid)
@@ -45,14 +45,14 @@ module GeoHydra
         nil
       end
     end
-    
+
     def find_lcauth_by_keyword(k)
       lcid = _get(k, :lcid)
       return $1 if lcid =~ /^(lcsh|lcnaf):/
       return 'lcsh' unless find_lc_by_keyword(k).nil? # default to lcsh if present
       nil
     end
-    
+
 
     # @see http://www.geonames.org/ontology/documentation.html
     # @return [String] geonames uri (includes trailing / as specified)
@@ -60,7 +60,7 @@ module GeoHydra
       return nil if _get(k, :id).nil?
       "http://sws.geonames.org/#{_get(k, :id)}/"
     end
-  
+
     # @return [String] The keyword
     def find_keyword_by_id(id)
       @registry.each do |k,v|

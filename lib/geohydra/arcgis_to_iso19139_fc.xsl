@@ -3,30 +3,30 @@
         This file transforms ArcGIS formatted metadata into ISO19110 xml. Metadata expresses entity and attribute information and is linked to the 19139 record using the 'uuid' attribute.
           created 2013-07 by Kim Durante, Stanford University Libraries. -->
 
-<xsl:stylesheet version="1.0" 
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:gco="http://www.isotc211.org/2005/gco" 
-  xmlns:gfc="http://www.isotc211.org/2005/gfc" 
-  xmlns:gmd="http://www.isotc211.org/2005/gmd" 
-  xmlns:gml="http://www.opengis.net/gml/3.2" 
+<xsl:stylesheet version="1.0"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:gco="http://www.isotc211.org/2005/gco"
+  xmlns:gfc="http://www.isotc211.org/2005/gfc"
+  xmlns:gmd="http://www.isotc211.org/2005/gmd"
+  xmlns:gml="http://www.opengis.net/gml/3.2"
   xmlns:gmx="http://www.isotc211.org/2005/gmx"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <xsl:output method="xml" encoding="utf-8" indent="yes"/>
 
   <xsl:template match="/">
-  <gfc:FC_FeatureCatalogue xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gfc="http://www.isotc211.org/2005/gfc" xmlns:gmd="http://www.isotc211.org/2005/gmd" 
-    xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink" 
+  <gfc:FC_FeatureCatalogue xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gfc="http://www.isotc211.org/2005/gfc" xmlns:gmd="http://www.isotc211.org/2005/gmd"
+    xmlns:gmx="http://www.isotc211.org/2005/gmx" xmlns:gml="http://www.opengis.net/gml/3.2" xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns="http://www.isotc211.org/2005/gfc" xsi:schemaLocation="http://www.isotc211.org/2005/gfc http://www.isotc211.org/2005/gfc/gfc.xsd">
 
     <xsl:attribute name="uuid">
       <xsl:value-of select="metadata/contInfo/FetCatDesc/catCitation/citId"/>
     </xsl:attribute>
-      
+
        <xsl:apply-templates select="child::node()"/>
      </gfc:FC_FeatureCatalogue>
-  </xsl:template> 
- 
+  </xsl:template>
+
   <xsl:template match="metadata">
         <gmx:name>
               <gco:CharacterString>
@@ -74,7 +74,7 @@
             </gmd:MD_CharacterSetCode>
           </gmx:characterSet>
     <xsl:choose>
-    <xsl:when test="contInfo/FetCatDesc/catCitation/citRespParty/rpOrgName">  
+    <xsl:when test="contInfo/FetCatDesc/catCitation/citRespParty/rpOrgName">
         <gfc:producer>
             <gmd:CI_ResponsibleParty>
                               <gmd:organisationName>
@@ -82,7 +82,7 @@
                               <xsl:value-of select="contInfo/FetCatDesc/catCitation/citRespParty/rpOrgName"/>
                           </gco:CharacterString>
                 </gmd:organisationName>
-          
+
               <gmd:role>
                 <gmd:CI_RoleCode>
                   <xsl:attribute name="codeList">
@@ -98,7 +98,7 @@
             </gmd:CI_ResponsibleParty>
           </gfc:producer>
           </xsl:when>
-  <xsl:when test="contInfo/FetCatDesc/catCitation/citRespParty/rpIndName">  
+  <xsl:when test="contInfo/FetCatDesc/catCitation/citRespParty/rpIndName">
     <gfc:producer>
       <gmd:CI_ResponsibleParty>
         <gmd:individualName>
@@ -106,7 +106,7 @@
             <xsl:value-of select="contInfo/FetCatDesc/catCitation/citRespParty/rpIndName"/>
           </gco:CharacterString>
         </gmd:individualName>
-        
+
         <gmd:role>
           <gmd:CI_RoleCode>
             <xsl:attribute name="codeList">
@@ -154,7 +154,7 @@
                       <gfc:carrierOfCharacteristics>
                       <gfc:FC_FeatureAttribute>
                         <!-- for range values -->
-                        
+
                           <xsl:for-each select="attrlabl">
                              <gfc:memberName>
                                  <gco:LocalName>
@@ -162,7 +162,7 @@
                                  </gco:LocalName>
                                </gfc:memberName>
                              </xsl:for-each>
-                        
+
                         <xsl:for-each select="attrdef">
                             <gfc:definition>
                               <gco:CharacterString>
@@ -170,11 +170,11 @@
                                </gco:CharacterString>
                                   </gfc:definition>
                               </xsl:for-each>
-                        
+
                         <gfc:cardinality>
                             <xsl:attribute name="gco:nilReason">unknown</xsl:attribute>
                           </gfc:cardinality>
-                        
+
                         <xsl:for-each select="attrdefs">
                           <gfc:definitionReference>
                             <gfc:FC_DefinitionReference>
@@ -218,7 +218,7 @@
                             </gfc:FC_DefinitionReference>
                           </gfc:definitionReference>
                         </xsl:for-each>
-                        
+
                       <xsl:for-each select="attrtype">
                           <gfc:valueType>
                             <gco:TypeName>
@@ -230,7 +230,7 @@
                             </gco:TypeName>
                           </gfc:valueType>
                         </xsl:for-each>
-                        
+
                     <xsl:for-each select="attrdomv/edom">
                           <gfc:listedValue>
                             <gfc:FC_ListedValue>
@@ -295,8 +295,8 @@
                             </gfc:FC_ListedValue>
                           </gfc:listedValue>
                         </xsl:for-each>
-                        
-                        
+
+
                         <xsl:for-each select="attudomv/codesetd">
                           <gfc:listedValue>
                             <gfc:FC_ListedValue>

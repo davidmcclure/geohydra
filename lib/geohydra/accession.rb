@@ -11,14 +11,14 @@ module GeoHydra
       'image/png' => Assembly::FILE_ATTRIBUTES['image/jp2'], # preview image
       'application/zip' => Assembly::FILE_ATTRIBUTES['default'] # data file
     )
-  
+
     attr_reader :druid
     def initialize(druid)
       if druid.is_a? String
         druid = DruidTools::Druid.new(druid)
       end
       unless druid.is_a? DruidTools::Druid
-        raise ArgumentError, "Invalid druid: #{druid}" 
+        raise ArgumentError, "Invalid druid: #{druid}"
       end
       @druid = druid
     end
@@ -35,12 +35,12 @@ module GeoHydra
           seq = 1
           objects.each do |k, v|
             next if v.nil? or v.empty?
-            resource_type = case k 
-              when :Data 
+            resource_type = case k
+              when :Data
                 :object
               when :Preview
                 :preview
-              else 
+              else
                 :attachment
               end
             xml.resource(
@@ -71,11 +71,11 @@ module GeoHydra
                   :image_type => FastImage.type(o.path),
                   :image_mimetype => MIME::Types.type_for("xxx.#{FastImage.type(o.path)}").first
                 }) if flags[:debug]
-              
+
                 mimetype = o.image?? MIME::Types.type_for("xxx.#{FastImage.type(o.path)}").first.to_s : o.mimetype
                 o.file_attributes ||= FILE_ATTRIBUTES[mimetype] || FILE_ATTRIBUTES['default']
                 [:publish, :shelve].each {|t| o.file_attributes[t] = 'yes'}
-              
+
                 roletype = if mimetype == 'application/zip'
                              if o.path =~ %r{_(EPSG_\d+)}i # derivative
                                'derivative'
@@ -89,17 +89,17 @@ module GeoHydra
                                  'master'
                                end
                            end || nil
-              
+
                 case roletype
                 when 'master'
                   o.file_attributes[:preserve] = 'yes'
                 else
                   o.file_attributes[:preserve] = 'no'
                 end
-                            
+
                 xml.file o.file_attributes.merge(
                            :id => o.filename,
-                           :mimetype => mimetype, 
+                           :mimetype => mimetype,
                            :size => o.filesize,
                            :role => roletype || 'master') do
 
@@ -108,7 +108,7 @@ module GeoHydra
                       xml.geoData do
                         xml.parent.add_child geoData
                       end
-                      geoData = nil # only once                  
+                      geoData = nil # only once
                     else
                       if o.filename =~ %r{_EPSG_(\d+)\.zip}i
                         xml.geoData :srsName => "EPSG:#{$1}"
@@ -133,7 +133,7 @@ module GeoHydra
     def each_upload fn, label, flags
       if (File.size(fn).to_f/2**20) < flags[:upload_max]
         $stderr.puts "Uploading content #{fn}" if flags[:verbose]
-        yield Assembly::ObjectFile.new(fn, :label => label)        
+        yield Assembly::ObjectFile.new(fn, :label => label)
       else
         $stderr.puts "Skipping content #{fn}" if flags[:verbose]
       end
@@ -148,13 +148,13 @@ module GeoHydra
     def self.run(druid, flags = {})
       self.new(druid).accession(flags)
     end
-    
+
     def accession(flags)
       ap({:flags => flags}) if flags[:debug]
 
       # validate parameters
       unless ['world','stanford','none', 'dark'].include? flags[:rights]
-        raise ArgumentError, "Invalid rights: #{flags[:rights]}" 
+        raise ArgumentError, "Invalid rights: #{flags[:rights]}"
       end
 
       # setup input metadata
@@ -183,7 +183,7 @@ module GeoHydra
         opts[k] = flags[k] unless flags[k].nil?
       end
       unless flags[:tags].nil?
-        flags[:tags].each { |t| opts[:tags] << t } 
+        flags[:tags].each { |t| opts[:tags] << t }
       end
 
       ap({:item_options => opts}) if flags[:debug]
@@ -206,7 +206,7 @@ module GeoHydra
         item = Dor::Item.find(@druid.druid)
         # add collection when we don't use registration service
         unless opts[:collection].nil?
-          item.add_collection(opts[:collection]) 
+          item.add_collection(opts[:collection])
         end
       rescue ActiveFedora::ObjectNotFoundError => e
         # Register item
@@ -221,7 +221,7 @@ module GeoHydra
       end
 
       # verify that we found the item
-      raise ArgumentError, "#{@druid.druid} not found" if item.nil? 
+      raise ArgumentError, "#{@druid.druid} not found" if item.nil?
 
       # now item is registered, so generate mods
       $stderr.puts "Assigning GeoMetadata for #{item.id}" if flags[:verbose]
@@ -251,7 +251,7 @@ module GeoHydra
         ns = {}
         doc.collect_namespaces.each do |k, v|
           if k =~ %r{^xmlns:(.*)}i
-            ns[$1] = v 
+            ns[$1] = v
           else
             ns['mods'] = v
           end
@@ -264,12 +264,12 @@ module GeoHydra
         xml = create_content_metadata objects, geoData, flags
         item.datastreams['contentMetadata'].content = xml
         ap({:contentMetadataDS => item.datastreams['contentMetadata'].ng_xml}) if flags[:debug]
-        
+
         puts "Saving contentMetadata..." if flags[:verbose]
         File.open(druid.metadata_dir + '/contentMetadata.xml', 'w') do |f|
           f << item.datastreams['contentMetadata'].ng_xml.to_xml
         end
-        
+
         if flags[:shelve]
           $stderr.puts "Shelving to stacks content..." if flags[:verbose]
           files = []
@@ -277,7 +277,7 @@ module GeoHydra
             files << f['id'].to_s
           end
           ap({ :id => @druid.druid, :files => files }) if flags[:debug]
-        
+
           Dor::DigitalStacksService.shelve_to_stacks @druid.druid, files
         end
       end
@@ -286,6 +286,6 @@ module GeoHydra
       $stderr.puts "Saving #{item.id}" if flags[:verbose]
       item.save
     end
-  
+
   end
 end

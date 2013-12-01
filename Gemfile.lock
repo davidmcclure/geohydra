@@ -103,7 +103,6 @@ PATH
       rest-client
       rgeo
       rgeo-shapefile
-      rgeoserver (~> 0.6.0)
       rsolr
 
 GEM
